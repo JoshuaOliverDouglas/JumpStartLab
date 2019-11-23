@@ -1,4 +1,5 @@
 class ArticlesController < ApplicationController
+    include ArticlesHelper
 
   def index
     @articles = Article.all
@@ -6,6 +7,41 @@ class ArticlesController < ApplicationController
 
   def show
     @article = Article.find(params[:id])
+  end
+
+  def new
+    @article = Article.new
+  end
+
+  def create
+    @article = Article.new(article_params)
+    @article.save
+
+    flash.notice = "#{@article.title} was born"
+
+    redirect_to article_path(@article)
+  end
+
+  def destroy
+    @article = Article.find(params[:id])
+    @article.destroy
+
+    flash.notice = "You bastard you deleted #{@article.title}"
+    
+    redirect_to articles_path(@articles)
+  end
+
+  def edit
+    @article = Article.find(params[:id])
+  end
+
+  def update
+    @article = Article.find(params[:id])
+    @article.update(article_params)
+
+    flash.notice = "Well fucking done on updating: #{@article.title}"
+
+    redirect_to article_path(@article)
   end
 
 end
